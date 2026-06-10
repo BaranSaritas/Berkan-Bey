@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berkan Yeşiltaş</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400&family=Archivo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --void:#0a0b0e;
+    --char:#101216;
+    --panel:#15171c;
+    --line:rgba(200,204,210,.12);
+    --line-soft:rgba(200,204,210,.06);
+    --plat:#c8ccd2;
+    --bright:#e9ecf1;
+    --steel:#7d828a;
+    --dim:#565b63;
+    --maxw:1180px;
+  }
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--void);color:var(--plat);
+    font-family:"Archivo",sans-serif;font-weight:300;
+    line-height:1.7;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  }
+  /* fixed atmosphere */
+  .bg-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background-image:repeating-linear-gradient(90deg,transparent 0,transparent calc(50% - .5px),var(--line-soft) calc(50% - .5px),var(--line-soft) 50%);
+    background-size:calc(100%/6) 100%;}
+  .bg-noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  .vignette{position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(120% 80% at 50% 30%,transparent 40%,rgba(0,0,0,.55) 100%)}
+
+  /* side rail */
+  .rail{position:fixed;top:0;bottom:0;left:0;width:54px;z-index:30;
+    display:flex;align-items:center;justify-content:center;
+    border-right:1px solid var(--line);background:rgba(10,11,14,.4);backdrop-filter:blur(2px)}
+  .rail span{writing-mode:vertical-rl;transform:rotate(180deg);
+    font-size:11px;letter-spacing:.55em;color:var(--dim);text-transform:uppercase}
+
+  /* top nav */
+  header{position:fixed;top:0;left:54px;right:0;z-index:25;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px clamp(20px,4vw,52px);
+    border-bottom:1px solid transparent;transition:border-color .4s,background .4s,backdrop-filter .4s}
+  header.stuck{border-color:var(--line);background:rgba(10,11,14,.72);backdrop-filter:blur(10px)}
+  .brand{font-family:"Bodoni Moda",serif;font-weight:500;font-size:18px;letter-spacing:.18em;color:var(--bright)}
+  nav{display:flex;gap:clamp(16px,2.6vw,38px)}
+  nav a{text-decoration:none;color:var(--steel);font-size:11px;letter-spacing:.28em;text-transform:uppercase;position:relative;transition:color .3s}
+  nav a:hover,nav a:focus-visible{color:var(--bright);outline:none}
+  nav a.active{color:var(--bright)}
+  nav a::after{content:"";position:absolute;left:0;bottom:-7px;height:1px;width:0;background:currentColor;transition:width .35s}
+  nav a:hover::after,nav a:focus-visible::after,nav a.active::after{width:100%}
+
+  main{position:relative;z-index:2;padding-left:54px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(20px,5vw,60px)}
+
+  /* eyebrow */
+  .eyebrow{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+  .eyebrow .num{font-family:"Bodoni Moda",serif;font-size:13px;color:var(--steel);letter-spacing:.1em}
+  .eyebrow .lbl{font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:var(--steel)}
+  .eyebrow .ln{flex:1;height:1px;background:var(--line)}
+
+  /* ---------- HERO ---------- */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;padding:120px 0 80px}
+  .hero .loc{font-size:11px;letter-spacing:.55em;text-transform:uppercase;color:var(--steel);margin-bottom:26px}
+  .diamond{width:9px;height:9px;border:1px solid var(--plat);transform:rotate(45deg);display:inline-block;margin:0 0 30px}
+  .hero h1{font-family:"Bodoni Moda",serif;font-weight:500;
+    font-size:clamp(52px,13vw,168px);line-height:.92;letter-spacing:.01em;color:var(--bright)}
+  .hero h1 .sheen{background:linear-gradient(110deg,#5a5e66 25%,#f6f8fb 50%,#5a5e66 75%);
+    background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:sheen 7s linear infinite}
+  @keyframes sheen{from{background-position:220% 0}to{background-position:-220% 0}}
+  .hero .role{margin-top:30px;font-size:13px;letter-spacing:.46em;text-transform:uppercase;color:var(--plat)}
+  .hero .motto{margin-top:30px;font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;
+    font-size:clamp(19px,2.6vw,30px);color:var(--steel);max-width:24ch}
+  .hero .cue{position:absolute;bottom:36px;left:0;font-size:10px;letter-spacing:.4em;color:var(--dim)}
+  .hero .cue i{display:inline-block;animation:bob 2.4s ease-in-out infinite;font-style:normal}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+
+  section{padding:clamp(90px,13vw,170px) 0;position:relative}
+  .div-top{border-top:1px solid var(--line)}
+
+  /* ---------- HAKKIMDA ---------- */
+  .about-grid{display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(34px,6vw,90px);align-items:start}
+  .about-title{font-family:"Bodoni Moda",serif;font-size:clamp(34px,5vw,60px);font-weight:500;color:var(--bright);line-height:1.05}
+  .about-body p{color:#a7acb3;font-size:clamp(16px,1.5vw,18px);margin-bottom:22px;max-width:54ch}
+  .about-body p strong{color:var(--bright);font-weight:400}
+  .facts{margin-top:38px;border-top:1px solid var(--line)}
+  .facts .row{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+  .facts .k{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--steel)}
+  .facts .v{font-family:"Bodoni Moda",serif;color:var(--bright);font-size:16px;letter-spacing:.04em}
+  .watermark{position:absolute;right:-2vw;top:50%;transform:translateY(-50%);
+    font-family:"Bodoni Moda",serif;font-size:clamp(180px,30vw,420px);line-height:.7;
+    color:rgba(200,204,210,.025);z-index:-1;pointer-events:none;user-select:none}
+
+  /* ---------- İLKELER ---------- */
+  .princ{display:flex;flex-direction:column}
+  .princ .item{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,60px);
+    align-items:baseline;padding:clamp(26px,4vw,42px) 0;border-top:1px solid var(--line);
+    transition:background .4s}
+  .princ .item:last-child{border-bottom:1px solid var(--line)}
+  .princ .item:hover{background:linear-gradient(90deg,rgba(200,204,210,.03),transparent)}
+  .princ .pn{font-family:"Bodoni Moda",serif;font-size:clamp(16px,1.6vw,18px);color:var(--steel)}
+  .princ .pc{display:flex;flex-direction:column;gap:10px}
+  .princ .pt{font-family:"Bodoni Moda",serif;font-weight:500;font-size:clamp(26px,4.4vw,52px);color:var(--bright);letter-spacing:.02em}
+  .princ .pd{color:var(--steel);font-size:clamp(15px,1.5vw,18px);font-style:italic;font-family:"Bodoni Moda",serif;font-weight:400;max-width:48ch}
+
+  /* ---------- İLETİŞİM ---------- */
+  .contact{text-align:center}
+  .contact .lead{font-family:"Bodoni Moda",serif;font-style:italic;font-weight:400;
+    font-size:clamp(22px,3.4vw,40px);color:#aeb3ba;max-width:20ch;margin:0 auto 18px;line-height:1.3}
+  .mail{display:inline-block;margin:30px 0 8px;font-family:"Bodoni Moda",serif;
+    font-size:clamp(24px,5vw,58px);font-weight:500;color:var(--bright);text-decoration:none;
+    border-bottom:1px solid var(--line);padding-bottom:8px;transition:border-color .35s,letter-spacing .35s}
+  .mail:hover,.mail:focus-visible{border-color:var(--plat);letter-spacing:.02em;outline:none}
+  .socials{display:flex;flex-wrap:wrap;justify-content:center;gap:0;max-width:680px;margin:54px auto 0;
+    border-top:1px solid var(--line)}
+  .socials a{flex:1 1 50%;min-width:200px;display:flex;align-items:center;justify-content:space-between;
+    gap:18px;padding:22px clamp(14px,3vw,28px);text-decoration:none;color:var(--plat);
+    border-bottom:1px solid var(--line);position:relative;overflow:hidden;transition:color .3s}
+  .socials a:nth-child(odd){border-right:1px solid var(--line)}
+  .socials a .pf{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--steel);transition:color .3s}
+  .socials a .hd{font-family:"Bodoni Moda",serif;font-size:clamp(15px,1.7vw,19px);color:var(--bright)}
+  .socials a .ar{color:var(--dim);transition:transform .35s,color .3s}
+  .socials a:hover,.socials a:focus-visible{outline:none}
+  .socials a:hover .pf,.socials a:focus-visible .pf{color:var(--plat)}
+  .socials a:hover .ar,.socials a:focus-visible .ar{transform:translateX(6px);color:var(--plat)}
+  .socials a::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(200,204,210,.05),transparent);
+    transform:scaleX(0);transform-origin:left;transition:transform .4s ease;z-index:-1}
+  .socials a:hover::before,.socials a:focus-visible::before{transform:scaleX(1)}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:40px clamp(20px,5vw,60px);
+    display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;
+    max-width:var(--maxw);margin:0 auto}
+  footer .fb{font-family:"Bodoni Moda",serif;letter-spacing:.18em;color:var(--plat);font-size:15px}
+  footer .fm{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--dim)}
+
+  /* reveal */
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+  .rv.in{opacity:1;transform:none}
+
+  @media (max-width:860px){
+    .about-grid{grid-template-columns:1fr}
+    .socials a{flex:1 1 100%}
+    .socials a:nth-child(odd){border-right:none}
+  }
+  @media (max-width:680px){
+    .rail{display:none}
+    main,header{padding-left:0}
+    header{left:0}
+    nav{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rv{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-noise"></div>
+  <div class="vignette"></div>
+
+  <aside class="rail"><span>Berkan Yeşiltaş · Samsun</span></aside>
+
+  <header id="top">
+    <div class="brand">B · Y</div>
+    <nav>
+      <a href="#hakkimda">Hakkımda</a>
+      <a href="#ilkeler">İlkeler</a>
+      <a href="#iletisim">İletişim</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <div class="hero wrap">
+      <div class="loc rv">SAMSUN · MMXXV</div>
+      <span class="diamond rv"></span>
+      <h1 class="rv"><span class="sheen">BERKAN<br>YEŞİLTAŞ</span></h1>
+      <div class="role rv">MÜTEŞEBBİS</div>
+      <p class="motto rv">Sükût, çoğu zaman en ağır cevaptır.</p>
+      <div class="cue"><i>↓</i>&nbsp;&nbsp;AŞAĞI</div>
+    </div>
+
+    <!-- HAKKIMDA -->
+    <section id="hakkimda" class="div-top">
+      <span class="watermark">B</span>
+      <div class="wrap">
+        <div class="eyebrow rv"><span class="num">00</span><span class="lbl">Hakkımda</span><span class="ln"></span></div>
+        <div class="about-grid">
+          <h2 class="about-title rv">Kim<br>olduğum.</h2>
+          <div class="about-body">
+            <p class="rv">Samsun'da doğdum, sözünün arkasında durmayı her şeyin önünde tutan bir evde büyüdüm. <strong>İşimi gürültüyle değil, neticeyle anlatmayı</strong> tercih ederim.</p>
+            <p class="rv">Yıllardır kurduğum ilişkilerin temeli sadelik ve güven üzerine. Bir kere el sıkıştıktan sonra gerisi teferruattır. Az konuşur, dinlemeyi bilir; verdiğim sözü senet sayarım.</p>
+            <p class="rv">Burası benim sade duvarım: kim olduğumu, neye değer verdiğimi ve bana nasıl ulaşılacağını gösterir. Fazlası yok, eksiği de.</p>
+            <div class="facts rv">
+              <div class="row"><span class="k">Şehir</span><span class="v">Samsun</span></div>
+              <div class="row"><span class="k">Uğraş</span><span class="v">Müteşebbis · Yatırım</span></div>
+              <div class="row"><span class="k">İlke</span><span class="v">Söz namustur</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- İLKELER -->
+    <section id="ilkeler" class="div-top">
+      <div class="wrap">
+        <div class="eyebrow rv"><span class="num">01</span><span class="lbl">İlkeler</span><span class="ln"></span></div>
+        <div class="princ">
+          <div class="item rv"><div class="pn">01</div><div class="pc"><div class="pt">SÖZ</div><div class="pd">Verilen söz senettir; imza aranmaz, sözün kendisi mühürdür.</div></div></div>
+          <div class="item rv"><div class="pn">02</div><div class="pc"><div class="pt">SADAKAT</div><div class="pd">Sofranı paylaştığın insana sırtını dönmezsin. Bu kadar yalın.</div></div></div>
+          <div class="item rv"><div class="pn">03</div><div class="pc"><div class="pt">SABIR</div><div class="pd">Acele eden yorulur, bekleyen kazanır. Doğru vakit her şeyi yerine koyar.</div></div></div>
+          <div class="item rv"><div class="pn">04</div><div class="pc"><div class="pt">VAKAR</div><div class="pd">Sesini yükseltmeden de duyulursun; ağırlık ses tonunda değil, duruştadır.</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- İLETİŞİM -->
+    <section id="iletisim" class="div-top contact">
+      <div class="wrap">
+        <div class="eyebrow rv" style="justify-content:center"><span class="num">02</span><span class="lbl">İletişim</span></div>
+        <p class="lead rv">Kapı herkese açık değildir; doğru kişiye daima aralık.</p>
+        <a class="mail rv" href="mailto:berkan@yesiltas.com">berkan@yesiltas.com</a>
+        <div class="socials rv">
+          <a href="https://instagram.com/" target="_blank" rel="noopener"><span><span class="pf">Instagram</span><br><span class="hd">@berkanyesiltas</span></span><span class="ar">↗</span></a>
+          <a href="https://x.com/" target="_blank" rel="noopener"><span><span class="pf">X</span><br><span class="hd">@berkanyesiltas</span></span><span class="ar">↗</span></a>
+          <a href="https://t.me/" target="_blank" rel="noopener"><span><span class="pf">Telegram</span><br><span class="hd">@berkanyesiltas</span></span><span class="ar">↗</span></a>
+          <a href="https://wa.me/" target="_blank" rel="noopener"><span><span class="pf">WhatsApp</span><br><span class="hd">+90 5•• ••• •• ••</span></span><span class="ar">↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span class="fb">B · Y</span>
+      <span class="fm">Berkan Yeşiltaş · Samsun · MMXXV</span>
+    </footer>
+  </main>
+
+<script>
+  // sticky header
+  const head=document.getElementById('top');
+  addEventListener('scroll',()=>{head.classList.toggle('stuck',scrollY>40)},{passive:true});
+
+  // reveal
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.16});
+  document.querySelectorAll('.rv').forEach((el,i)=>{el.style.transitionDelay=((i%5)*60)+'ms';io.observe(el)});
+
+  // active nav
+  const links=[...document.querySelectorAll('nav a')];
+  const map=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const sio=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+    const i=map.indexOf(e.target);links.forEach(l=>l.classList.remove('active'));if(i>-1)links[i].classList.add('active')}})},{rootMargin:'-45% 0px -50% 0px'});
+  map.forEach(s=>s&&sio.observe(s));
+</script>
+</body>
+</html>
